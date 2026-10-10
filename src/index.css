@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body { @apply bg-page text-ink font-sans antialiased overflow-x-hidden; }
+}
+
+@layer components {
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 font-semibold transition active:scale-95 disabled:opacity-50; }
+  .btn-gold { @apply btn bg-gold text-brand-dark hover:brightness-95; }
+  .btn-blue { @apply btn bg-brand text-white hover:bg-brand-dark; }
+  .input { @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20; }
+  .card { @apply rounded-2xl bg-white shadow-sm ring-1 ring-slate-100; }
+  .skeleton { @apply animate-pulse rounded-2xl bg-slate-200; }
+}
