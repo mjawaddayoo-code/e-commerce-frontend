@@ -77,7 +77,7 @@ export default function Checkout() {
         {step === 2 && (
           <div className="space-y-4">
             <div className="rounded-xl bg-slate-50 p-3 text-sm"><b>{v.name}</b> · {v.phone}<br />{v.street}, {v.area}, {v.city}</div>
-            <div className="space-y-1 text-sm">{quote?.items.map((i, idx) => <div key={idx} className="flex justify-between"><span>{i.name} × {i.quantity}</span><span>{rs(i.lineTotal)}</span></div>)}</div>
+            <div className="space-y-1 text-sm">{quote?.items.map((i, idx) => <div key={idx} className="flex justify-between"><span>{i.name} × {i.quantity}{[...(i.variants || []).map((v) => v.label), ...(i.extras || []).map((e) => e.name)].length > 0 && <><br /><span className="text-xs text-slate-500">{[...(i.variants || []).map((v) => v.label), ...(i.extras || []).map((e) => e.name)].join(' · ')}</span></>}</span><span>{rs(i.lineTotal)}</span></div>)}</div>
             <div>
               <p className="mb-2 font-semibold">Payment method</p>
               <label className="flex items-center gap-2 rounded-xl border-2 border-brand p-3"><input type="radio" checked readOnly />Cash on Delivery <span className="text-xs text-slate-500">(pay when your order arrives)</span></label>
