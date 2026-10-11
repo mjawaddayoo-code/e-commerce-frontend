@@ -2,6 +2,8 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../components/ConfirmProvider';
 import api, { errMsg, rs } from '../services/api';
+import { Printer } from 'lucide-react';
+import { printBill } from './printBill';
 import { STATUSES, label } from '../utils/constants';
 import { Badge, Modal, Pager, Table, useFetch } from './ui';
 
@@ -12,6 +14,7 @@ export default function Orders() {
   const [open, setOpen] = useState(null);
   const { data, loading, error, reload } = useFetch('/admin/orders', { status: status || undefined, search: search || undefined, page, limit: 15 });
   const confirm = useConfirm();
+  const settings = useFetch('/admin/settings');
   document.title = 'Orders';
 
   const change = async (o, next) => {
@@ -28,7 +31,7 @@ export default function Orders() {
       </div>
       {error && <p className="text-red-600">{error}</p>}
       {loading && !data ? <div className="skeleton h-64" /> : (
-        <Table head={['Order', 'Customer', 'Items', 'Amount', 'Payment', 'Pay status', 'Status', 'Date']} empty={!data?.orders.length && 'No orders found'}>
+        <Table head={['Order', 'Customer', 'Items', 'Amount', 'Payment', 'Pay status', 'Status', 'Date','Bill]} empty={!data?.orders.length && 'No orders found'}>
           {data?.orders.map((o) => {
             const closed = ['delivered', 'cancelled'].includes(o.orderStatus);
             return (
@@ -40,7 +43,7 @@ export default function Orders() {
                 <td className="px-3 py-2 uppercase">{o.paymentMethod}</td>
                 <td className="px-3 py-2"><Badge s={o.paymentStatus} /></td>
                 <td className="px-3 py-2">{closed ? <Badge s={o.orderStatus} /> : <select value={o.orderStatus} onChange={(e) => change(o, e.target.value)} className="rounded-lg border px-2 py-1 text-xs">{STATUSES.map((s) => <option key={s} value={s}>{label(s)}</option>)}</select>}</td>
-                <td className="whitespace-nowrap px-3 py-2 text-xs text-slate-500">{new Date(o.createdAt).toLocaleString()}</td>
+                <td className="px-3 py-2"><button onClick={() => printBill(o, settings.data?.settings)} aria-label="Print bill" title="Print bill"><Printer className="h-4 w-4 text-brand" /></button></td>
               </tr>
             );
           })}
@@ -48,6 +51,7 @@ export default function Orders() {
       )}
       <Pager page={page} pages={data?.pages || 1} onChange={setPage} />
       {open && (
+        <button onClick={() => printBill(open, settings.data?.settings)} className="btn-blue mt-4 w-full"><Printer className="h-4 w-4" />Print bill</button>
         <Modal title={`Order ${open.orderNumber}`} onClose={() => setOpen(null)}>
           <div className="space-y-3 text-sm">
             <p><b>{open.customer.name}</b> · {open.customer.phone} · {open.customer.email}</p>
