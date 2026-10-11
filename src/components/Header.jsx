@@ -4,6 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu as MenuIcon, X, User, LogOut, Heart, Package } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { motion } from 'framer-motion';
 
 const baseLinks = [['/', 'Home'], ['/menu', 'Menu'], ['/#categories', 'Categories'], ['/offers', 'Offers'], ['/about', 'About'], ['/contact', 'Contact']];
 const userLinks = [['/orders', 'My Orders'], ['/wishlist', 'Wishlist'], ['/account', 'Account']];
@@ -28,7 +29,7 @@ export default function Header() {
         <div className="ml-auto flex items-center gap-3 md:ml-0">
           <Link to="/cart" className="relative p-1" aria-label="Cart">
             <ShoppingCart />
-            {count > 0 && <span className="absolute -right-2 -top-1 rounded-full bg-gold px-1.5 text-xs font-bold text-brand-dark">{count}</span>}
+            {count > 0 && <motion.span key={count} initial={{ scale: 1.8 }} animate={{ scale: 1 }} className="absolute -right-2 -top-1 rounded-full bg-gold px-1.5 text-xs font-bold text-brand-dark">{count}</motion.span>}
           </Link>
           {user ? (
             <div className="hidden items-center gap-3 text-sm md:flex">
