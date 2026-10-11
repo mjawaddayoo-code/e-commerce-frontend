@@ -18,6 +18,7 @@ export default function ProductDetails() {
   const [pick, setPick] = useState({});
   const [extras, setExtras] = useState([]);
   const [img, setImg] = useState(0);
+  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     setP(null); setErr(''); setQty(1); setExtras([]); setImg(0);
@@ -99,7 +100,7 @@ export default function ProductDetails() {
               <span className="w-6 text-center font-bold">{qty}</span>
               <button onClick={() => setQty(Math.min(Math.min(p.stock, 50), qty + 1))} className="p-2" aria-label="Increase"><Plus className="h-4 w-4" /></button>
             </div>
-            <button disabled={p.stock < 1} onClick={() => add(line())} className="btn-gold flex-1">Add to Cart · {rs(unit * qty)}</button>
+            <button disabled={p.stock < 1} onClick={() => { add(line()); setAdded(true); setTimeout(() => setAdded(false), 1500); }} className={`btn flex-1 ${added ? 'bg-green-600 text-white' : 'bg-gold text-brand-dark'}`}>{added ? '✓ Added to cart' : `Add to Cart · ${rs(unit * qty)}`}</button>
             <button disabled={p.stock < 1} onClick={() => { add(line()); nav('/checkout'); }} className="btn-blue">Buy Now</button>
           </div>
         </div>
