@@ -34,7 +34,7 @@ export default function Orders() {
             <div><p className="font-bold">{o.orderNumber}</p><p className="text-xs text-slate-500">{new Date(o.createdAt).toLocaleString()}</p></div>
             <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusColor(o.orderStatus)}`}>{label(o.orderStatus)}</span>
           </div>
-          <p className="text-sm text-slate-600">{o.items.map((i) => `${i.name} ×${i.quantity}`).join(', ')}</p>
+          <p className="text-sm text-slate-600">{o.items.map((i) => { const opt = [...(i.variants || []).map((v) => v.label), ...(i.extras || []).map((e) => e.name)].join(', '); return `${i.name}${opt ? ` (${opt})` : ''} ×${i.quantity}`; }).join(', ')}</p>
           <div className="flex items-center justify-between text-sm">
             <span className="font-extrabold text-brand">{rs(o.total)}</span>
             <span className={`rounded-full px-2 py-0.5 text-xs ${statusColor(o.paymentStatus)}`}>Payment {o.paymentStatus}</span>
